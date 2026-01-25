@@ -158,20 +158,20 @@ export default function Header() {
             </div>
 
             {/* Center: Logo */}
-            <Link href="/" style={{
-              textDecoration: 'none',
-              color: 'var(--secondary)',
-            }}>
-              <h1 style={{
-                fontSize: 'clamp(20px, 5vw, 32px)',
-                letterSpacing: '0.2em',
-                margin: 0,
-                fontWeight: 400,
-                whiteSpace: 'nowrap',
-              }}>
-                LUXX boutique
-              </h1>
-            </Link>
+            <Link href="/" style={{ textDecoration: 'none', color: 'var(--secondary)', flexShrink: 0 }}>
+  <h1
+    style={{
+      fontSize: 'clamp(18px, 4.5vw, 28px)',
+      letterSpacing: '0.15em',
+      margin: 0,
+      fontWeight: 400,
+      whiteSpace: 'nowrap',
+    }}
+  >
+    LUXX
+  </h1>
+</Link>
+
 
             {/* Right: Icons */}
             <div style={{
