@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import ProductCard from './ProductCard';
 import { products } from '@/lib/data';
 
@@ -9,6 +10,8 @@ interface ProductGridProps {
   filter?: 'new' | 'bestseller' | 'sale' | 'all';
   limit?: number;
   showLoadMore?: boolean;
+  showViewAll?: boolean;
+  viewAllLink?: string;
 }
 
 export default function ProductGrid({
@@ -16,6 +19,8 @@ export default function ProductGrid({
   filter = 'all',
   limit = 8,
   showLoadMore = false,
+  showViewAll = false,
+  viewAllLink = '/nuevos',
 }: ProductGridProps) {
   const [visibleCount, setVisibleCount] = useState(limit);
 
@@ -26,27 +31,83 @@ export default function ProductGrid({
   const visibleProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
 
-  const loadMore = () => {
-    setVisibleCount((prev) => prev + 4);
-  };
-
   return (
-    <section className="py-16 md:py-24" id="productos">
+    <section style={{ padding: '40px 0' }} id="productos">
       <div className="container">
-        <h2 className="text-3xl md:text-4xl text-center mb-12">{title}</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '24px',
+        }}>
+          <h2 style={{
+            fontSize: 'clamp(18px, 5vw, 28px)',
+            letterSpacing: '0.15em',
+            margin: 0,
+          }}>
+            {title}
+          </h2>
+          {showViewAll && (
+            <Link
+              href={viewAllLink}
+              style={{
+                fontSize: '12px',
+                letterSpacing: '0.1em',
+                color: 'var(--muted-foreground)',
+                textDecoration: 'none',
+                borderBottom: '1px solid var(--muted-foreground)',
+                paddingBottom: '2px',
+              }}
+            >
+              VER TODO
+            </Link>
+          )}
+        </div>
+
+        {/* Products Grid */}
+        <div className="home-products-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '12px',
+        }}>
           {visibleProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+
+        {/* Load More */}
         {showLoadMore && hasMore && (
-          <div className="text-center mt-12">
-            <button onClick={loadMore} className="btn btn-secondary">
+          <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 4)}
+              className="btn btn-secondary"
+            >
               CARGAR MÁS
             </button>
           </div>
         )}
       </div>
+
+      <style jsx global>{`
+        .home-products-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        @media (min-width: 640px) {
+          .home-products-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .home-products-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+          }
+        }
+      `}</style>
     </section>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Eye, Heart, ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Plus } from 'lucide-react';
 import { Product } from '@/lib/types';
 import { formatPrice } from '@/lib/utils';
 import { useCartStore } from '@/lib/store';
@@ -17,126 +17,153 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const { addItem } = useCartStore();
 
-  const handleQuickAdd = () => {
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.stopPropagation();
     addItem(product, product.sizes[0], product.colors[0]);
   };
 
-  const getBadgeColor = (badge: string) => {
+  const getBadgeStyle = (badge: string): React.CSSProperties => {
     switch (badge) {
       case 'sale':
-        return 'bg-red-500';
+        return { backgroundColor: '#ef4444' };
       case 'new':
-        return 'bg-[var(--primary)]';
+        return { backgroundColor: 'var(--primary)' };
       case 'bestseller':
-        return 'bg-[var(--secondary)]';
-      case 'soldout':
-        return 'bg-gray-500';
+        return { backgroundColor: 'var(--secondary)' };
       default:
-        return 'bg-[var(--primary)]';
+        return { backgroundColor: 'var(--primary)' };
     }
   };
 
   const getBadgeText = (badge: string) => {
     switch (badge) {
-      case 'sale':
-        return 'SALE';
-      case 'new':
-        return 'NUEVO';
-      case 'bestseller':
-        return 'TOP';
-      case 'soldout':
-        return 'AGOTADO';
-      default:
-        return badge.toUpperCase();
+      case 'sale': return 'SALE';
+      case 'new': return 'NUEVO';
+      case 'bestseller': return 'TOP';
+      default: return badge.toUpperCase();
     }
   };
 
   return (
     <>
       <div
-        className="product-card group"
+        onClick={() => setIsQuickViewOpen(true)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        style={{ cursor: 'pointer' }}
       >
         {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-[var(--muted)] mb-4">
+        <div style={{
+          position: 'relative',
+          aspectRatio: '3/4',
+          overflow: 'hidden',
+          backgroundColor: 'var(--muted)',
+          marginBottom: '12px',
+        }}>
           <Image
             src={isHovered && product.hoverImage ? product.hoverImage : product.image}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            style={{
+              objectFit: 'cover',
+              transition: 'transform 0.5s ease',
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            }}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
 
           {/* Badge */}
           {product.badge && (
-            <span
-              className={`absolute top-3 left-3 px-3 py-1 text-white text-xs tracking-wider ${getBadgeColor(
-                product.badge
-              )}`}
-            >
+            <span style={{
+              position: 'absolute',
+              top: '10px',
+              left: '10px',
+              padding: '4px 10px',
+              color: 'white',
+              fontSize: '10px',
+              letterSpacing: '0.1em',
+              fontWeight: 600,
+              ...getBadgeStyle(product.badge),
+            }}>
               {getBadgeText(product.badge)}
             </span>
           )}
 
           {/* Discount Badge */}
           {product.originalPrice && (
-            <span className="absolute top-3 right-3 bg-red-500 px-2 py-1 text-white text-xs">
+            <span style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              backgroundColor: '#ef4444',
+              padding: '4px 8px',
+              color: 'white',
+              fontSize: '10px',
+              fontWeight: 600,
+            }}>
               -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
             </span>
           )}
 
-          {/* Quick Actions */}
-          <div className="quick-view absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 translate-y-4 transition-all duration-300 flex items-center justify-center gap-2">
-            <button
-              onClick={handleQuickAdd}
-              className="w-10 h-10 bg-white flex items-center justify-center hover:bg-[var(--primary)] hover:text-white transition-colors"
-              title="Agregar al carrito"
-            >
-              <ShoppingBag size={18} />
-            </button>
-            <button
-              onClick={() => setIsQuickViewOpen(true)}
-              className="w-10 h-10 bg-white flex items-center justify-center hover:bg-[var(--primary)] hover:text-white transition-colors"
-              title="Vista rápida"
-            >
-              <Eye size={18} />
-            </button>
-            <button
-              className="w-10 h-10 bg-white flex items-center justify-center hover:bg-[var(--primary)] hover:text-white transition-colors"
-              title="Agregar a favoritos"
-            >
-              <Heart size={18} />
-            </button>
-          </div>
+          {/* Quick Add Button */}
+          <button
+            onClick={handleQuickAdd}
+            style={{
+              position: 'absolute',
+              bottom: '10px',
+              right: '10px',
+              width: '36px',
+              height: '36px',
+              backgroundColor: 'white',
+              border: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              opacity: isHovered ? 1 : 0,
+              transform: isHovered ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            }}
+            title="Agregar al carrito"
+          >
+            <Plus size={18} />
+          </button>
         </div>
 
         {/* Info */}
-        <div className="text-center">
-          <h3 className="text-sm font-semibold mb-2 hover:text-[var(--primary)] transition-colors cursor-pointer">
+        <div style={{ textAlign: 'center' }}>
+          <h3 style={{
+            fontSize: '13px',
+            fontWeight: 500,
+            marginBottom: '6px',
+            color: 'var(--secondary)',
+            lineHeight: 1.4,
+          }}>
             {product.name}
           </h3>
-          <div className="flex items-center justify-center gap-2">
-            <span className="font-semibold text-[var(--primary)]">
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+          }}>
+            <span style={{
+              fontSize: '14px',
+              fontWeight: 600,
+              color: 'var(--secondary)',
+            }}>
               {formatPrice(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-sm text-[var(--muted-foreground)] line-through">
+              <span style={{
+                fontSize: '12px',
+                color: 'var(--muted-foreground)',
+                textDecoration: 'line-through',
+              }}>
                 {formatPrice(product.originalPrice)}
               </span>
             )}
-          </div>
-          {/* Colors */}
-          <div className="flex items-center justify-center gap-1 mt-2">
-            {product.colors.slice(0, 4).map((color) => (
-              <span
-                key={color}
-                className="text-xs text-[var(--muted-foreground)]"
-              >
-                {color}
-                {product.colors.indexOf(color) < Math.min(product.colors.length - 1, 3) && ', '}
-              </span>
-            ))}
           </div>
         </div>
       </div>

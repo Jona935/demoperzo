@@ -14,38 +14,98 @@ const instagramImages = [
 
 export default function Instagram() {
   return (
-    <section className="py-16 md:py-24 bg-[var(--muted)]">
+    <section style={{
+      padding: '40px 0',
+      backgroundColor: 'var(--muted)',
+    }}>
       <div className="container">
-        <h2 className="text-3xl md:text-4xl text-center mb-4">@ONELOVEDBABE</h2>
-        <p className="text-center text-[var(--muted-foreground)] mb-12">
-          Síguenos en Instagram y comparte tu estilo
+        <h2 style={{
+          fontSize: 'clamp(18px, 5vw, 24px)',
+          textAlign: 'center',
+          marginBottom: '8px',
+          letterSpacing: '0.15em',
+        }}>
+          @LUXXBOUTIQUE
+        </h2>
+        <p style={{
+          textAlign: 'center',
+          color: 'var(--muted-foreground)',
+          marginBottom: '24px',
+          fontSize: '13px',
+        }}>
+          Síguenos en Instagram
         </p>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-4">
+        <div className="instagram-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '4px',
+        }}>
           {instagramImages.map((image, index) => (
             <a
               key={index}
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative aspect-square overflow-hidden"
+              className="instagram-item"
+              style={{
+                position: 'relative',
+                aspectRatio: '1',
+                overflow: 'hidden',
+                display: 'block',
+              }}
             >
               <Image
                 src={image}
                 alt={`Instagram ${index + 1}`}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                style={{
+                  objectFit: 'cover',
+                  transition: 'transform 0.5s ease',
+                }}
                 sizes="(max-width: 640px) 33vw, 16vw"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+              <div className="instagram-overlay" style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: 'rgba(0,0,0,0)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'background-color 0.3s ease',
+              }}>
                 <InstagramIcon
-                  size={32}
-                  className="text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  size={24}
+                  style={{ color: 'white', opacity: 0, transition: 'opacity 0.3s ease' }}
+                  className="instagram-icon"
                 />
               </div>
             </a>
           ))}
         </div>
       </div>
+
+      <style jsx global>{`
+        .instagram-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 4px;
+        }
+        @media (min-width: 640px) {
+          .instagram-grid {
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+          }
+        }
+        .instagram-item:hover img {
+          transform: scale(1.1);
+        }
+        .instagram-item:hover .instagram-overlay {
+          background-color: rgba(0,0,0,0.4) !important;
+        }
+        .instagram-item:hover .instagram-icon {
+          opacity: 1 !important;
+        }
+      `}</style>
     </section>
   );
 }

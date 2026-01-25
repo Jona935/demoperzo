@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const slides = [
@@ -8,22 +9,25 @@ const slides = [
     image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920',
     subtitle: 'Nueva Colección',
     title: 'PRIMAVERA 2025',
-    description: 'Descubre las últimas tendencias en moda femenina',
+    description: 'Descubre las últimas tendencias',
     cta: 'COMPRAR AHORA',
+    link: '/nuevos',
   },
   {
     image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920',
     subtitle: 'Exclusivo Online',
-    title: 'VESTIDOS DE ENSUEÑO',
-    description: 'Piezas únicas para momentos especiales',
+    title: 'VESTIDOS',
+    description: 'Piezas únicas para ti',
     cta: 'VER COLECCIÓN',
+    link: '/vestidos',
   },
   {
     image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920',
     subtitle: 'Hasta 40% OFF',
-    title: 'SALE DE TEMPORADA',
-    description: 'Los mejores estilos a precios increíbles',
+    title: 'SALE',
+    description: 'Los mejores precios',
     cta: 'IR A SALE',
+    link: '/sale',
   },
 ];
 
@@ -37,85 +41,176 @@ export default function Hero() {
     return () => clearInterval(timer);
   }, []);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
   return (
-    <section className="relative h-[70vh] md:h-[85vh] overflow-hidden">
+    <section style={{
+      position: 'relative',
+      height: '65vh',
+      minHeight: '400px',
+      maxHeight: '700px',
+      overflow: 'hidden',
+    }}>
       {/* Slides */}
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? 'opacity-100' : 'opacity-0'
-          }`}
           style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: index === currentSlide ? 1 : 0,
+            transition: 'opacity 0.8s ease',
             backgroundImage: `url(${slide.image})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="absolute inset-0 flex items-center justify-center text-center text-white">
-            <div
-              className={`max-w-2xl px-4 transition-all duration-700 ${
-                index === currentSlide
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-8'
-              }`}
-            >
-              <span className="text-sm md:text-base tracking-[0.3em] mb-4 block">
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.35)',
+          }} />
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            color: 'white',
+            padding: '20px',
+          }}>
+            <div style={{
+              maxWidth: '500px',
+              opacity: index === currentSlide ? 1 : 0,
+              transform: index === currentSlide ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.7s ease',
+            }}>
+              <span style={{
+                fontSize: '12px',
+                letterSpacing: '0.25em',
+                marginBottom: '12px',
+                display: 'block',
+                opacity: 0.9,
+              }}>
                 {slide.subtitle}
               </span>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl tracking-[0.2em] mb-4">
+              <h2 style={{
+                fontSize: 'clamp(32px, 8vw, 56px)',
+                letterSpacing: '0.15em',
+                marginBottom: '12px',
+                fontWeight: 400,
+              }}>
                 {slide.title}
               </h2>
-              <p className="text-base md:text-lg mb-8 opacity-90">
+              <p style={{
+                fontSize: '14px',
+                marginBottom: '24px',
+                opacity: 0.9,
+              }}>
                 {slide.description}
               </p>
-              <a href="#productos" className="btn btn-primary bg-white text-[var(--secondary)] hover:bg-[var(--primary)] hover:text-white">
+              <Link
+                href={slide.link}
+                style={{
+                  display: 'inline-block',
+                  padding: '14px 32px',
+                  backgroundColor: 'white',
+                  color: 'var(--secondary)',
+                  textDecoration: 'none',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  letterSpacing: '0.15em',
+                  transition: 'all 0.3s ease',
+                }}
+              >
                 {slide.cta}
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       ))}
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - Hidden on mobile */}
       <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/40 flex items-center justify-center text-white transition-colors"
+        onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
+        className="hero-arrow"
+        style={{
+          position: 'absolute',
+          left: '16px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '44px',
+          height: '44px',
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          border: 'none',
+          display: 'none',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
       >
-        <ChevronLeft size={28} />
+        <ChevronLeft size={24} />
       </button>
       <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/40 flex items-center justify-center text-white transition-colors"
+        onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
+        className="hero-arrow"
+        style={{
+          position: 'absolute',
+          right: '16px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '44px',
+          height: '44px',
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          border: 'none',
+          display: 'none',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
       >
-        <ChevronRight size={28} />
+        <ChevronRight size={24} />
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+      <div style={{
+        position: 'absolute',
+        bottom: '24px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        gap: '10px',
+      }}>
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-colors ${
-              index === currentSlide ? 'bg-white' : 'bg-white/50'
-            }`}
+            onClick={() => setCurrentSlide(index)}
+            style={{
+              width: index === currentSlide ? '24px' : '8px',
+              height: '8px',
+              borderRadius: '4px',
+              backgroundColor: index === currentSlide ? 'white' : 'rgba(255,255,255,0.5)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
           />
         ))}
       </div>
+
+      <style jsx global>{`
+        @media (min-width: 768px) {
+          .hero-arrow {
+            display: flex !important;
+          }
+          .hero-arrow:hover {
+            background-color: rgba(255,255,255,0.4) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

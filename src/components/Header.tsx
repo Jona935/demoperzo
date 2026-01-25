@@ -7,12 +7,12 @@ import { useCartStore } from '@/lib/store';
 import Cart from './Cart';
 
 const navLinks = [
-  { href: '/', label: 'NUEVOS' },
-  { href: '/', label: 'VESTIDOS' },
-  { href: '/', label: 'TOPS' },
-  { href: '/', label: 'BOTTOMS' },
-  { href: '/', label: 'ACCESORIOS' },
-  { href: '/', label: 'SALE', highlight: true },
+  { href: '/nuevos', label: 'NUEVOS' },
+  { href: '/vestidos', label: 'VESTIDOS' },
+  { href: '/tops', label: 'TOPS' },
+  { href: '/bottoms', label: 'BOTTOMS' },
+  { href: '/accesorios', label: 'ACCESORIOS' },
+  { href: '/sale', label: 'SALE', highlight: true },
 ];
 
 const currencies = [
@@ -320,22 +320,27 @@ export default function Header() {
             backgroundColor: 'white',
             borderTop: '1px solid var(--border)',
             position: 'absolute',
+            top: '100%',
             left: 0,
             right: 0,
+            width: '100%',
+            maxWidth: '100vw',
             boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            zIndex: 100,
+            overflow: 'hidden',
           }}>
-            <nav style={{ display: 'flex', flexDirection: 'column', padding: '8px 0' }}>
+            <nav style={{ display: 'flex', flexDirection: 'column' }}>
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
                   style={{
-                    padding: '14px 24px',
+                    padding: '16px 20px',
                     fontSize: '13px',
                     letterSpacing: '0.15em',
                     textDecoration: 'none',
                     color: link.highlight ? 'var(--primary)' : 'var(--secondary)',
-                    borderBottom: '1px solid var(--muted)',
+                    borderBottom: '1px solid var(--border)',
                   }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

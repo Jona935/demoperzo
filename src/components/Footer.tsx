@@ -5,46 +5,107 @@ import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--secondary)] text-white pt-16 pb-8">
+    <footer style={{
+      backgroundColor: 'var(--secondary)',
+      color: 'white',
+      padding: '40px 0 24px',
+    }}>
       <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="footer-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '32px',
+          marginBottom: '32px',
+        }}>
           {/* Brand */}
-          <div>
-            <h3 className="text-2xl mb-4 tracking-[0.18em]">ONE LOVED BABE</h3>
-            <p className="text-sm opacity-70 mb-6 leading-relaxed">
+          <div style={{ gridColumn: 'span 2' }}>
+            <h3 style={{
+              fontSize: '20px',
+              marginBottom: '12px',
+              letterSpacing: '0.15em',
+              fontWeight: 400,
+            }}>
+              LUXX BOUTIQUE
+            </h3>
+            <p style={{
+              fontSize: '13px',
+              opacity: 0.7,
+              marginBottom: '16px',
+              lineHeight: 1.6,
+              maxWidth: '300px',
+            }}>
               Tu destino de moda favorito. Piezas únicas seleccionadas con amor para ti.
             </p>
-            <div className="flex gap-4">
+            <div style={{ display: 'flex', gap: '12px' }}>
               <a
                 href="#"
-                className="w-10 h-10 border border-white/30 flex items-center justify-center hover:bg-[var(--primary)] hover:border-[var(--primary)] transition-colors"
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  transition: 'all 0.3s ease',
+                }}
               >
-                <Facebook size={18} />
+                <Facebook size={16} />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 border border-white/30 flex items-center justify-center hover:bg-[var(--primary)] hover:border-[var(--primary)] transition-colors"
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  transition: 'all 0.3s ease',
+                }}
               >
-                <Instagram size={18} />
+                <Instagram size={16} />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 border border-white/30 flex items-center justify-center hover:bg-[var(--primary)] hover:border-[var(--primary)] transition-colors"
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  transition: 'all 0.3s ease',
+                }}
               >
-                <Twitter size={18} />
+                <Twitter size={16} />
               </a>
             </div>
           </div>
 
           {/* Help */}
           <div>
-            <h4 className="text-sm tracking-[0.18em] mb-4">AYUDA</h4>
-            <ul className="space-y-2">
-              {['Contacto', 'Envíos', 'Devoluciones', 'FAQ', 'Guía de Tallas'].map((item) => (
-                <li key={item}>
+            <h4 style={{
+              fontSize: '12px',
+              letterSpacing: '0.15em',
+              marginBottom: '16px',
+              fontWeight: 600,
+            }}>
+              AYUDA
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {['Contacto', 'Envíos', 'Devoluciones', 'FAQ'].map((item) => (
+                <li key={item} style={{ marginBottom: '10px' }}>
                   <Link
                     href="#"
-                    className="text-sm opacity-70 hover:opacity-100 hover:text-[var(--primary)] transition-colors"
+                    style={{
+                      fontSize: '13px',
+                      color: 'rgba(255,255,255,0.7)',
+                      textDecoration: 'none',
+                      transition: 'color 0.3s ease',
+                    }}
                   >
                     {item}
                   </Link>
@@ -55,53 +116,69 @@ export default function Footer() {
 
           {/* Info */}
           <div>
-            <h4 className="text-sm tracking-[0.18em] mb-4">INFORMACIÓN</h4>
-            <ul className="space-y-2">
-              {['Sobre Nosotros', 'Términos y Condiciones', 'Política de Privacidad', 'Blog'].map(
-                (item) => (
-                  <li key={item}>
-                    <Link
-                      href="#"
-                      className="text-sm opacity-70 hover:opacity-100 hover:text-[var(--primary)] transition-colors"
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-sm tracking-[0.18em] mb-4">CONTACTO</h4>
-            <ul className="space-y-3 text-sm opacity-70">
-              <li className="flex items-center gap-2">
-                <span>📧</span> hola@onelovedbabe.com
-              </li>
-              <li className="flex items-center gap-2">
-                <span>📞</span> +52 (55) 1234-5678
-              </li>
-              <li className="flex items-center gap-2">
-                <span>🕐</span> Lun-Vie: 9am - 6pm
-              </li>
+            <h4 style={{
+              fontSize: '12px',
+              letterSpacing: '0.15em',
+              marginBottom: '16px',
+              fontWeight: 600,
+            }}>
+              INFO
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {['Sobre Nosotros', 'Términos', 'Privacidad'].map((item) => (
+                <li key={item} style={{ marginBottom: '10px' }}>
+                  <Link
+                    href="#"
+                    style={{
+                      fontSize: '13px',
+                      color: 'rgba(255,255,255,0.7)',
+                      textDecoration: 'none',
+                      transition: 'color 0.3s ease',
+                    }}
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm opacity-70">
-            © 2025 One Loved Babe. Todos los derechos reservados.
+        <div style={{
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          paddingTop: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '12px',
+          textAlign: 'center',
+        }}>
+          <p style={{ fontSize: '12px', opacity: 0.6 }}>
+            © 2025 Luxx Boutique. Todos los derechos reservados.
           </p>
-          <div className="flex items-center gap-4 text-2xl opacity-70">
-            <span>💳</span>
-            <span>💳</span>
-            <span>💳</span>
-            <span>💳</span>
+          <div style={{ display: 'flex', gap: '8px', opacity: 0.6 }}>
+            <span style={{ fontSize: '20px' }}>💳</span>
+            <span style={{ fontSize: '20px' }}>💳</span>
+            <span style={{ fontSize: '20px' }}>💳</span>
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        @media (min-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 2fr 1fr 1fr 1fr !important;
+          }
+          .footer-grid > div:first-child {
+            grid-column: span 1 !important;
+          }
+        }
+        .footer-grid a:hover {
+          color: var(--primary) !important;
+          border-color: var(--primary) !important;
+        }
+      `}</style>
     </footer>
   );
 }
