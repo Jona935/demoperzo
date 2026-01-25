@@ -169,7 +169,7 @@ export default function Header() {
                 fontWeight: 400,
                 whiteSpace: 'nowrap',
               }}>
-                ONE LOVED BABE
+                LUXX boutique
               </h1>
             </Link>
 
