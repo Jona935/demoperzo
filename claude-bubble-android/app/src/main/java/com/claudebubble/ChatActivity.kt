@@ -13,26 +13,30 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        openClaudeInChrome()
-
-        // Close this transparent activity immediately after launching Chrome
+        openClaude()
         finish()
     }
 
-    private fun openClaudeInChrome() {
-        val colorSchemeParams = CustomTabColorSchemeParams.Builder()
+    private fun openClaude() {
+        val colorParams = CustomTabColorSchemeParams.Builder()
             .setToolbarColor(ContextCompat.getColor(this, R.color.claude_orange))
             .build()
 
-        val customTabsIntent = CustomTabsIntent.Builder()
-            .setDefaultColorSchemeParams(colorSchemeParams)
-            .setShowTitle(true)
+        val displayHeight = resources.displayMetrics.heightPixels
+
+        val intent = CustomTabsIntent.Builder()
+            .setDefaultColorSchemeParams(colorParams)
+            .setShowTitle(false)
             .setUrlBarHidingEnabled(true)
-            .setShareState(CustomTabsIntent.SHARE_STATE_ON)
+            // Open as bottom sheet covering ~80% of screen
+            .setInitialActivityHeightPx((displayHeight * 0.82).toInt(),
+                CustomTabsIntent.ACTIVITY_HEIGHT_ADJUSTABLE)
+            .setToolbarCornerRadiusDp(16)
+            .setShareState(CustomTabsIntent.SHARE_STATE_OFF)
+            .setCloseButtonPosition(CustomTabsIntent.CLOSE_BUTTON_POSITION_END)
             .build()
 
-        customTabsIntent.launchUrl(this, Uri.parse("https://claude.ai/new"))
+        intent.launchUrl(this, Uri.parse("https://claude.ai/new"))
     }
 
     companion object {
