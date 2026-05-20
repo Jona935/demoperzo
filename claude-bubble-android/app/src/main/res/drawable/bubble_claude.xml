@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bubble icon using Claude mascot style - circle with face -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Drop shadow -->
+    <item android:top="4dp" android:left="4dp">
+        <shape android:shape="oval">
+            <solid android:color="#50000000" />
+            <size android:width="64dp" android:height="64dp" />
+        </shape>
+    </item>
+    <!-- Background circle cream -->
+    <item android:bottom="4dp" android:right="4dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5E6D3" />
+            <stroke android:width="2dp" android:color="#CC7A3E" />
+            <size android:width="64dp" android:height="64dp" />
+        </shape>
+    </item>
+</layer-list>

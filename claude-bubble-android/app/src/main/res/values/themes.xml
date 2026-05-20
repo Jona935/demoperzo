@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ClaudeBubble" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/claude_orange</item>
+        <item name="colorPrimaryVariant">@color/claude_orange_dark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+    </style>
+
+    <style name="Theme.ClaudeBubble.Chat" parent="Theme.ClaudeBubble">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+</resources>

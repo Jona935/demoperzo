@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="claude_orange">#CC7A3E</color>
+    <color name="claude_orange_dark">#B56835</color>
+    <color name="claude_cream">#F5E6D3</color>
+    <color name="background">#FAF8F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#1A1A1A</color>
+    <color name="text_secondary">#666666</color>
+    <color name="message_user_bg">#CC7A3E</color>
+    <color name="message_assistant_bg">#EFEFEF</color>
+    <color name="error_red">#D32F2F</color>
+    <color name="bubble_shadow">#40000000</color>
+</resources>
