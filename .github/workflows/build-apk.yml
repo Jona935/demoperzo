@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -21,13 +21,29 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Install Android SDK components
+        run: |
+          # ubuntu-latest runners have the SDK at $ANDROID_SDK_ROOT
+          echo "Android SDK root: $ANDROID_SDK_ROOT"
+          ls $ANDROID_SDK_ROOT/cmdline-tools/ || true
+
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+
+          # Accept all licenses non-interactively
+          yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+
+          # Install platform and build tools
+          "$SDKMANAGER" \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "platform-tools"
+
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.4'
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
 
       - name: Generate Gradle wrapper
         working-directory: claude-bubble-android
@@ -37,7 +53,9 @@ jobs:
 
       - name: Build Debug APK
         working-directory: claude-bubble-android
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+        run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -45,8 +63,3 @@ jobs:
           name: claude-bubble-debug
           path: claude-bubble-android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
-
-      - name: Show APK size
-        run: |
-          APK=claude-bubble-android/app/build/outputs/apk/debug/app-debug.apk
-          echo "APK size: $(du -h $APK | cut -f1)"
