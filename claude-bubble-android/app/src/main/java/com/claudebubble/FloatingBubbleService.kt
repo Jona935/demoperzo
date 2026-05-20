@@ -20,13 +20,12 @@ class FloatingBubbleService : Service() {
 
     private lateinit var windowManager: WindowManager
     private lateinit var bubbleView: View
+    private lateinit var chatPanel: FloatingChatPanel
     private val CHANNEL_ID = "claude_bubble_channel"
     private val NOTIF_ID = 1001
 
-    private var initialX = 0
-    private var initialY = 0
-    private var initialTouchX = 0f
-    private var initialTouchY = 0f
+    private var initialX = 0; private var initialY = 0
+    private var initialTouchX = 0f; private var initialTouchY = 0f
     private var isDragging = false
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -35,6 +34,7 @@ class FloatingBubbleService : Service() {
         super.onCreate()
         createNotificationChannel()
         startForeground(NOTIF_ID, buildNotification())
+        chatPanel = FloatingChatPanel(this)
         createBubble()
     }
 
@@ -50,24 +50,21 @@ class FloatingBubbleService : Service() {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = 50
-            y = 300
+            x = 50; y = 300
         }
 
-        // Close button (X) stops the service
+        // X button: close bubble + panel
         bubbleView.findViewById<View>(R.id.ivCloseBubble).setOnClickListener {
             stopSelf()
         }
 
+        // Main bubble: toggle panel
         bubbleView.findViewById<View>(R.id.ivBubble).setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    initialX = params.x
-                    initialY = params.y
-                    initialTouchX = event.rawX
-                    initialTouchY = event.rawY
-                    isDragging = false
-                    true
+                    initialX = params.x; initialY = params.y
+                    initialTouchX = event.rawX; initialTouchY = event.rawY
+                    isDragging = false; true
                 }
                 MotionEvent.ACTION_MOVE -> {
                     val dx = event.rawX - initialTouchX
@@ -81,7 +78,7 @@ class FloatingBubbleService : Service() {
                     true
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (!isDragging) openChat()
+                    if (!isDragging) togglePanel()
                     true
                 }
                 else -> false
@@ -91,57 +88,54 @@ class FloatingBubbleService : Service() {
         windowManager.addView(bubbleView, params)
     }
 
-    private fun openChat() {
-        val intent = Intent(this, ChatActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+    private fun togglePanel() {
+        if (chatPanel.isVisible) {
+            chatPanel.hide()
+        } else {
+            chatPanel.show(
+                onMinimize = { /* panel hidden, bubble stays */ },
+                onClose = { /* panel closed, bubble stays */ }
+            )
         }
-        startActivity(intent)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::bubbleView.isInitialized) {
-            runCatching { windowManager.removeView(bubbleView) }
-        }
-    }
-
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            "Claude Bubble",
-            NotificationManager.IMPORTANCE_LOW
-        ).apply {
-            description = "Burbuja flotante de Claude"
-            setShowBadge(false)
-        }
-        getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
-    }
-
-    private fun buildNotification(): Notification {
-        val stopIntent = Intent(this, FloatingBubbleService::class.java).apply {
-            action = "STOP"
-        }
-        val stopPending = PendingIntent.getService(
-            this, 0, stopIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val openIntent = Intent(this, MainActivity::class.java)
-        val openPending = PendingIntent.getActivity(
-            this, 0, openIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Claude Bubble activo")
-            .setContentText("Toca el monito para chatear · X para cerrar la burbuja")
-            .setSmallIcon(R.drawable.ic_bubble_notif)
-            .setContentIntent(openPending)
-            .addAction(R.drawable.ic_close, "Detener", stopPending)
-            .setOngoing(true)
-            .build()
+        chatPanel.destroy()
+        if (::bubbleView.isInitialized) runCatching { windowManager.removeView(bubbleView) }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") stopSelf()
         return START_STICKY
+    }
+
+    private fun createNotificationChannel() {
+        val ch = NotificationChannel(CHANNEL_ID, "Claude Bubble",
+            NotificationManager.IMPORTANCE_LOW).apply {
+            description = "Burbuja flotante de Claude"
+            setShowBadge(false)
+        }
+        getSystemService(NotificationManager::class.java).createNotificationChannel(ch)
+    }
+
+    private fun buildNotification(): Notification {
+        val stopPending = PendingIntent.getService(
+            this, 0,
+            Intent(this, FloatingBubbleService::class.java).apply { action = "STOP" },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val openPending = PendingIntent.getActivity(
+            this, 0, Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Claude Bubble activo")
+            .setContentText("Toca a Claw'd para abrir/cerrar Claude")
+            .setSmallIcon(R.drawable.ic_bubble_notif)
+            .setContentIntent(openPending)
+            .addAction(R.drawable.ic_close, "Detener", stopPending)
+            .setOngoing(true)
+            .build()
     }
 }

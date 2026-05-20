@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Required for floating bubble over other apps -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- Foreground service to keep bubble alive -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <!-- Internet for claude.ai WebView -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Notifications for foreground service -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -32,8 +28,7 @@
 
         <activity
             android:name=".ChatActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Translucent" />
+            android:exported="false" />
 
         <service
             android:name=".FloatingBubbleService"
