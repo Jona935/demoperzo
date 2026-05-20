@@ -1,0 +1,54 @@
+name: Build Claude Bubble APK
+
+on:
+  push:
+    branches: [ "claude/floating-chat-bubble-app-XqMWw", "main" ]
+    paths:
+      - "claude-bubble-android/**"
+  workflow_dispatch:   # allows manual trigger from GitHub web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Make gradlew executable
+        working-directory: claude-bubble-android
+        run: chmod +x gradlew 2>/dev/null || true
+
+      - name: Generate gradlew if missing
+        working-directory: claude-bubble-android
+        run: |
+          if [ ! -f gradlew ]; then
+            gradle wrapper --gradle-version 8.4
+          fi
+
+      - name: Build Debug APK
+        working-directory: claude-bubble-android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-bubble-debug
+          path: claude-bubble-android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: Show APK info
+        working-directory: claude-bubble-android
+        run: |
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          echo "APK size: $(du -h $APK | cut -f1)"
+          echo "APK path: $APK"
