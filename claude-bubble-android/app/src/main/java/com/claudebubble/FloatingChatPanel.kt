@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -12,24 +14,29 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
 
 class FloatingChatPanel(private val context: Context) {
 
-    private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    private var panelView: View? = null
-    private var webView: WebView? = null
+    private val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    private val handler = Handler(Looper.getMainLooper())
+    private var root: View? = null
+    private var wv: WebView? = null
+
     var isVisible = false
         private set
 
     private val metrics get() = context.resources.displayMetrics
 
-    @SuppressLint("InflateParams", "SetJavaScriptEnabled", "ClickableViewAccessibility")
     fun show(onMinimize: () -> Unit, onClose: () -> Unit) {
         if (isVisible) return
+        handler.post { attach(onMinimize, onClose) }
+    }
 
+    @SuppressLint("InflateParams", "SetJavaScriptEnabled", "ClickableViewAccessibility")
+    private fun attach(onMinimize: () -> Unit, onClose: () -> Unit) {
         val view = LayoutInflater.from(context).inflate(R.layout.layout_chat_panel, null)
 
         val w = (metrics.widthPixels * 0.92).toInt()
@@ -38,70 +45,61 @@ class FloatingChatPanel(private val context: Context) {
         val params = WindowManager.LayoutParams(
             w, h,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            // Focusable so keyboard works inside WebView
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            // HARDWARE_ACCELERATED is required for WebView in overlays
+            WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.CENTER
-            y = -(metrics.heightPixels * 0.05).toInt() // slightly above center
         }
 
-        // Drag from title bar
-        var dragX = 0; var dragY = 0
-        var touchX = 0f; var touchY = 0f
-        view.findViewById<View>(R.id.titleBar).setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    dragX = params.x; dragY = params.y
-                    touchX = event.rawX; touchY = event.rawY
-                }
+        // Drag by title bar
+        var px = params.x; var py = params.y
+        var tx = 0f; var ty = 0f
+        view.findViewById<View>(R.id.titleBar).setOnTouchListener { _, e ->
+            when (e.action) {
+                MotionEvent.ACTION_DOWN -> { px = params.x; py = params.y; tx = e.rawX; ty = e.rawY }
                 MotionEvent.ACTION_MOVE -> {
-                    params.x = (dragX + event.rawX - touchX).toInt()
-                    params.y = (dragY + event.rawY - touchY).toInt()
-                    windowManager.updateViewLayout(view, params)
+                    params.x = (px + e.rawX - tx).toInt()
+                    params.y = (py + e.rawY - ty).toInt()
+                    runCatching { wm.updateViewLayout(view, params) }
                 }
             }
             false
         }
 
-        view.findViewById<View>(R.id.btnMinimize).setOnClickListener {
-            hide()
-            onMinimize()
-        }
+        view.findViewById<View>(R.id.btnMinimize).setOnClickListener { hide(); onMinimize() }
+        view.findViewById<View>(R.id.btnClose).setOnClickListener { hide(); onClose() }
 
-        view.findViewById<View>(R.id.btnClose).setOnClickListener {
-            hide()
-            onClose()
-        }
+        val webView = WebView(context).also { wv = it }
+        val progress = view.findViewById<ProgressBar>(R.id.progressBar)
+        view.findViewById<View>(R.id.btnReload).setOnClickListener { webView.reload() }
 
-        val wv = view.findViewById<WebView>(R.id.webView)
-        val progress = view.findViewById<View>(R.id.progressBar) as android.widget.ProgressBar
+        // Replace the placeholder WebView in the layout with our instance
+        val container = view.findViewById<android.widget.FrameLayout>(R.id.webViewContainer)
+        container.addView(webView, android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+            android.widget.FrameLayout.LayoutParams.MATCH_PARENT
+        ))
 
-        view.findViewById<View>(R.id.btnReload).setOnClickListener {
-            wv.reload()
-        }
+        setupWebView(webView, progress)
 
-        setupWebView(wv, progress)
-        webView = wv
-
-        windowManager.addView(view, params)
-        panelView = view
+        wm.addView(view, params)
+        root = view
         isVisible = true
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebView(wv: WebView, progress: android.widget.ProgressBar) {
-        wv.settings.apply {
+    private fun setupWebView(webView: WebView, progress: ProgressBar) {
+        webView.settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
             databaseEnabled = true
             setSupportZoom(false)
             loadWithOverviewMode = true
             useWideViewPort = true
-            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            // Identify as Chrome so Google login works
+            // Chrome UA so sites don't restrict features
             userAgentString = "Mozilla/5.0 (Linux; Android 13; Pixel 7) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) " +
                 "Chrome/124.0.0.0 Mobile Safari/537.36"
@@ -109,50 +107,51 @@ class FloatingChatPanel(private val context: Context) {
 
         android.webkit.CookieManager.getInstance().apply {
             setAcceptCookie(true)
-            setAcceptThirdPartyCookies(wv, true)
+            setAcceptThirdPartyCookies(webView, true)
         }
 
-        wv.webViewClient = object : WebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView, request: WebResourceRequest
             ): Boolean {
                 val url = request.url.toString()
-                // Google OAuth must open in Chrome (WebView is blocked by Google)
-                return if (url.contains("accounts.google.com") ||
+                val isGoogleAuth = url.contains("accounts.google.com") ||
                     url.contains("oauth2") ||
-                    url.contains("auth.anthropic")) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    }
-                    context.startActivity(intent)
+                    url.contains("auth.anthropic")
+                return if (isGoogleAuth) {
+                    context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                    )
                     true
-                } else {
-                    false
-                }
+                } else false
             }
         }
 
-        wv.webChromeClient = object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView, newProgress: Int) {
-                progress.progress = newProgress
-                progress.visibility = if (newProgress < 100) View.VISIBLE else View.GONE
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView, p: Int) {
+                progress.progress = p
+                progress.visibility = if (p < 100) View.VISIBLE else View.GONE
             }
         }
 
-        wv.loadUrl("https://claude.ai/new")
+        webView.loadUrl("https://claude.ai/new")
     }
 
     fun hide() {
-        panelView?.let {
-            runCatching { windowManager.removeView(it) }
-            panelView = null
+        handler.post {
+            root?.let { runCatching { wm.removeView(it) } }
+            root = null
+            isVisible = false
         }
-        isVisible = false
     }
 
     fun destroy() {
         hide()
-        webView?.destroy()
-        webView = null
+        handler.post {
+            wv?.apply { stopLoading(); destroy() }
+            wv = null
+        }
     }
 }

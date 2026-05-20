@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:background="@color/surface">
 
-        <!-- Title bar (drag handle) -->
+        <!-- Title bar / drag handle -->
         <LinearLayout
             android:id="@+id/titleBar"
             android:layout_width="match_parent"
@@ -24,7 +24,6 @@
             android:paddingEnd="8dp"
             android:background="@color/claude_orange">
 
-            <!-- Claw'd icon -->
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
@@ -43,7 +42,6 @@
                 android:textStyle="bold"
                 android:paddingStart="10dp" />
 
-            <!-- Reload button -->
             <ImageButton
                 android:id="@+id/btnReload"
                 android:layout_width="36dp"
@@ -53,7 +51,6 @@
                 android:tint="@android:color/white"
                 android:contentDescription="Recargar" />
 
-            <!-- Minimize to bubble -->
             <ImageButton
                 android:id="@+id/btnMinimize"
                 android:layout_width="36dp"
@@ -63,7 +60,6 @@
                 android:tint="@android:color/white"
                 android:contentDescription="Minimizar" />
 
-            <!-- Close panel -->
             <ImageButton
                 android:id="@+id/btnClose"
                 android:layout_width="36dp"
@@ -75,7 +71,7 @@
 
         </LinearLayout>
 
-        <!-- Loading bar -->
+        <!-- Progress bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
@@ -85,9 +81,9 @@
             android:progressTint="@color/claude_orange"
             android:visibility="gone" />
 
-        <!-- WebView -->
-        <WebView
-            android:id="@+id/webView"
+        <!-- WebView container: WebView is added programmatically -->
+        <FrameLayout
+            android:id="@+id/webViewContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
