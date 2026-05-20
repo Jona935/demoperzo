@@ -1,146 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Claw'd — Claude's orange cat mascot -->
+<!-- Claw'd — pixel-art style, matches official mascot -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Background circle (cream) -->
+    <!-- Cream background circle -->
     <path
-        android:fillColor="#F5E6D3"
+        android:fillColor="#F0EBE3"
         android:pathData="M54,54m-52,0a52,52 0,1 1,104 0a52,52 0,1 1,-104 0"/>
 
-    <!-- Left ear (pointy cat ear) -->
+    <!-- Body (main square block) -->
     <path
-        android:fillColor="#CC7A3E"
-        android:pathData="M22,48 L30,22 L42,42 Z"/>
-    <!-- Left ear inner -->
-    <path
-        android:fillColor="#E8A070"
-        android:pathData="M26,44 L31,26 L39,40 Z"/>
+        android:fillColor="#C8563C"
+        android:pathData="M28,30 L80,30 L80,72 L28,72 Z"/>
 
-    <!-- Right ear (pointy cat ear) -->
+    <!-- Left arm (square protrusion left) -->
     <path
-        android:fillColor="#CC7A3E"
-        android:pathData="M86,48 L78,22 L66,42 Z"/>
-    <!-- Right ear inner -->
-    <path
-        android:fillColor="#E8A070"
-        android:pathData="M82,44 L77,26 L69,40 Z"/>
+        android:fillColor="#C8563C"
+        android:pathData="M18,36 L28,36 L28,56 L18,56 Z"/>
 
-    <!-- Head / body (large orange circle) -->
+    <!-- Right arm (square protrusion right) -->
     <path
-        android:fillColor="#CC7A3E"
-        android:pathData="M54,54m-36,0a36,36 0,1 1,72 0a36,36 0,1 1,-72 0"/>
+        android:fillColor="#C8563C"
+        android:pathData="M80,36 L90,36 L90,56 L80,56 Z"/>
 
-    <!-- Face area (slightly lighter) -->
+    <!-- Left leg -->
     <path
-        android:fillColor="#D98B4A"
-        android:pathData="M54,56m-26,0a26,28 0,1 1,52 0a26,28 0,1 1,-52 0"/>
+        android:fillColor="#C8563C"
+        android:pathData="M32,72 L44,72 L44,86 L32,86 Z"/>
 
-    <!-- Muzzle (cream oval) -->
+    <!-- Right leg -->
     <path
-        android:fillColor="#F5E6D3"
-        android:pathData="M54,68m-14,0a14,10 0,1 1,28 0a14,10 0,1 1,-28 0"/>
+        android:fillColor="#C8563C"
+        android:pathData="M64,72 L76,72 L76,86 L64,86 Z"/>
 
-    <!-- Left eye white -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M38,52m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0"/>
-    <!-- Left pupil (cat slit) -->
+    <!-- Left eye (black square) -->
     <path
         android:fillColor="#1A1A1A"
-        android:pathData="M38,46 Q41,52 38,58 Q35,52 38,46Z"/>
+        android:pathData="M36,40 L48,40 L48,54 L36,54 Z"/>
+
+    <!-- Right eye (black square) -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M60,40 L72,40 L72,54 L60,54 Z"/>
+
     <!-- Left eye shine -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M36,49m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0"/>
+        android:pathData="M38,42 L43,42 L43,47 L38,47 Z"/>
 
-    <!-- Right eye white -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M70,52m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0"/>
-    <!-- Right pupil (cat slit) -->
-    <path
-        android:fillColor="#1A1A1A"
-        android:pathData="M70,46 Q73,52 70,58 Q67,52 70,46Z"/>
     <!-- Right eye shine -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M68,49m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0"/>
-
-    <!-- Nose (small triangle) -->
-    <path
-        android:fillColor="#CC5533"
-        android:pathData="M54,63 L51,60 L57,60 Z"/>
-
-    <!-- Mouth -->
-    <path
-        android:strokeColor="#8B4513"
-        android:strokeWidth="1.8"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M54,63 L54,66"/>
-    <path
-        android:strokeColor="#8B4513"
-        android:strokeWidth="1.8"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M47,67 Q54,72 61,67"/>
-
-    <!-- Left whiskers -->
-    <path
-        android:strokeColor="#8B6914"
-        android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M40,63 L22,60"/>
-    <path
-        android:strokeColor="#8B6914"
-        android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M40,66 L22,67"/>
-    <path
-        android:strokeColor="#8B6914"
-        android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M40,69 L22,74"/>
-
-    <!-- Right whiskers -->
-    <path
-        android:strokeColor="#8B6914"
-        android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M68,63 L86,60"/>
-    <path
-        android:strokeColor="#8B6914"
-        android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M68,66 L86,67"/>
-    <path
-        android:strokeColor="#8B6914"
-        android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M68,69 L86,74"/>
-
-    <!-- Forehead stripe markings (tabby stripes) -->
-    <path
-        android:strokeColor="#B86830"
-        android:strokeWidth="1.5"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M46,36 Q54,34 62,36"/>
-    <path
-        android:strokeColor="#B86830"
-        android:strokeWidth="1.5"
-        android:fillColor="@android:color/transparent"
-        android:strokeLineCap="round"
-        android:pathData="M48,40 Q54,38 60,40"/>
+        android:pathData="M62,42 L67,42 L67,47 L62,47 Z"/>
 
 </vector>

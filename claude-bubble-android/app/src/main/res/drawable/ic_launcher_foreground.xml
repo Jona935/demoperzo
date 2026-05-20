@@ -1,62 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Claw'd launcher icon -->
+<!-- Claw'd launcher icon — pixel art style -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Left ear -->
-    <path android:fillColor="#CC7A3E" android:pathData="M22,52 L31,26 L43,46 Z"/>
-    <path android:fillColor="#E8A070" android:pathData="M26,49 L32,30 L40,44 Z"/>
-
-    <!-- Right ear -->
-    <path android:fillColor="#CC7A3E" android:pathData="M86,52 L77,26 L65,46 Z"/>
-    <path android:fillColor="#E8A070" android:pathData="M82,49 L76,30 L68,44 Z"/>
-
-    <!-- Head -->
-    <path android:fillColor="#CC7A3E"
-        android:pathData="M54,56m-34,0a34,34 0,1 1,68 0a34,34 0,1 1,-68 0"/>
-
-    <!-- Face -->
-    <path android:fillColor="#D98B4A"
-        android:pathData="M54,58m-24,0a24,26 0,1 1,48 0a24,26 0,1 1,-48 0"/>
-
-    <!-- Muzzle -->
-    <path android:fillColor="#F5E6D3"
-        android:pathData="M54,70m-13,0a13,9 0,1 1,26 0a13,9 0,1 1,-26 0"/>
-
-    <!-- Eyes -->
-    <path android:fillColor="#FFFFFF" android:pathData="M39,53m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0"/>
-    <path android:fillColor="#1A1A1A" android:pathData="M39,48 Q42,53 39,58 Q36,53 39,48Z"/>
-    <path android:fillColor="#FFFFFF" android:pathData="M37,51m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0"/>
-
-    <path android:fillColor="#FFFFFF" android:pathData="M69,53m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0"/>
-    <path android:fillColor="#1A1A1A" android:pathData="M69,48 Q72,53 69,58 Q66,53 69,48Z"/>
-    <path android:fillColor="#FFFFFF" android:pathData="M67,51m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0"/>
-
-    <!-- Nose -->
-    <path android:fillColor="#CC5533" android:pathData="M54,64 L51,61 L57,61 Z"/>
-
-    <!-- Mouth -->
-    <path android:strokeColor="#8B4513" android:strokeWidth="1.8"
-        android:fillColor="@android:color/transparent" android:strokeLineCap="round"
-        android:pathData="M48,68 Q54,73 60,68"/>
-
-    <!-- Whiskers left -->
-    <path android:strokeColor="#8B6914" android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent" android:strokeLineCap="round"
-        android:pathData="M41,64 L24,61"/>
-    <path android:strokeColor="#8B6914" android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent" android:strokeLineCap="round"
-        android:pathData="M41,67 L24,68"/>
-
-    <!-- Whiskers right -->
-    <path android:strokeColor="#8B6914" android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent" android:strokeLineCap="round"
-        android:pathData="M67,64 L84,61"/>
-    <path android:strokeColor="#8B6914" android:strokeWidth="1.2"
-        android:fillColor="@android:color/transparent" android:strokeLineCap="round"
-        android:pathData="M67,67 L84,68"/>
+    <!-- Body -->
+    <path android:fillColor="#C8563C" android:pathData="M26,28 L82,28 L82,72 L26,72 Z"/>
+    <!-- Left arm -->
+    <path android:fillColor="#C8563C" android:pathData="M16,34 L26,34 L26,56 L16,56 Z"/>
+    <!-- Right arm -->
+    <path android:fillColor="#C8563C" android:pathData="M82,34 L92,34 L92,56 L82,56 Z"/>
+    <!-- Left leg -->
+    <path android:fillColor="#C8563C" android:pathData="M30,72 L44,72 L44,88 L30,88 Z"/>
+    <!-- Right leg -->
+    <path android:fillColor="#C8563C" android:pathData="M64,72 L78,72 L78,88 L64,88 Z"/>
+    <!-- Left eye -->
+    <path android:fillColor="#1A1A1A" android:pathData="M34,38 L48,38 L48,54 L34,54 Z"/>
+    <!-- Right eye -->
+    <path android:fillColor="#1A1A1A" android:pathData="M60,38 L74,38 L74,54 L60,54 Z"/>
+    <!-- Shines -->
+    <path android:fillColor="#FFFFFF" android:pathData="M36,40 L42,40 L42,46 L36,46 Z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M62,40 L68,40 L68,46 L62,46 Z"/>
 
 </vector>

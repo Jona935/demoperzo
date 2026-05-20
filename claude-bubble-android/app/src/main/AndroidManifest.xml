@@ -33,8 +33,7 @@
         <activity
             android:name=".ChatActivity"
             android:exported="false"
-            android:theme="@style/Theme.ClaudeBubble.Chat"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/Theme.Translucent" />
 
         <service
             android:name=".FloatingBubbleService"

@@ -8,7 +8,10 @@
         <item name="colorSurface">@color/surface</item>
     </style>
 
-    <style name="Theme.ClaudeBubble.Chat" parent="Theme.ClaudeBubble">
-        <item name="android:windowSoftInputMode">adjustResize</item>
+    <!-- Transparent theme for ChatActivity (just launches Chrome Custom Tab) -->
+    <style name="Theme.Translucent" parent="Theme.ClaudeBubble">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>
